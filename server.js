@@ -3,13 +3,25 @@ const path = require('path');
 
 const app = express();
 
-app.get('/' || '/home', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/home.html'));
+app.use((req, res, next) => {
+  res.show = (name) => {
+    res.sendFile(path.join(__dirname, `/views/${name}`));
+  };
+  next();
+});
+
+app.get('/', (req, res) => {
+    res.show('home.html');
+  });
+  
+app.get('/home', (req, res) => {
+  res.show('home.html');
 });
 
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/about.html'));
+  res.show('about.html');
 });
+
 
 
 app.listen(8000, () => {
